@@ -16,6 +16,7 @@
                                 <tr>
                                     <th>Vardas</th>
                                     <th>Pavardė</th>
+                                    <th>Automobiliai</th>
                                     <th></th>
                                     <th></th>
                                 </tr>
@@ -26,10 +27,17 @@
                                             <td>{{ $owner->name }}</td>
                                             <td>{{ $owner->surname }}</td>
                                             <td>
+                                               @foreach($owner->cars as $car)
+                                                    {{ $car->brand }} {{ $car->model }} <br>
+                                                @endforeach
+                                            </td>
+                                            <td>
                                                 <a href="{{ route("owners.update", $owner->id) }}" class="btn btn-success">Redaguoti</a>
                                             </td>
                                             <td>
+                                                @if ($owner->cars->count()==0)
                                                 <a href="{{ route("owners.delete", $owner->id) }}" class="btn btn-danger">Ištrinti</a>
+                                                @endif
                                             </td>
                                         </tr>
                                     @endforeach

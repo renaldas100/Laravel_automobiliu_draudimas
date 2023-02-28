@@ -2,13 +2,14 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\Owners;
+use App\Models\Car;
+use App\Models\Owner;
 use Illuminate\Http\Request;
 
-class OwnersController extends Controller
+class OwnerController extends Controller
 {
     public function owners(){
-        $owners=Owners::all();
+        $owners=Owner::all();
         return view("owners.list",[
             "owners"=>$owners
         ]);
@@ -19,7 +20,7 @@ class OwnersController extends Controller
     }
 
     public function store(Request $request){
-        $owner=new Owners();
+        $owner=new Owner();
         $owner->name=$request->name;
         $owner->surname=$request->surname;
         $owner->save();
@@ -27,14 +28,15 @@ class OwnersController extends Controller
     }
 
     public function update(Request $request, $id){
-        $owner=Owners::find($id);
+        $owner=Owner::find($id);
         return view("owners.update",[
-            'owner'=>$owner
+            'owner'=>$owner,
+            'cars'=>Car::all()
         ]);
     }
 
     public function save(Request $request, $id){
-        $owner=Owners::find($id);
+        $owner=Owner::find($id);
         $owner->name=$request->name;
         $owner->surname=$request->surname;
         $owner->save();
@@ -42,7 +44,7 @@ class OwnersController extends Controller
     }
 
     public function delete($id){
-        Owners::destroy($id);
+        Owner::destroy($id);
         return redirect()->route("owners.list");
     }
 
