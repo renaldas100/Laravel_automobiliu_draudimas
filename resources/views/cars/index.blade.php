@@ -29,6 +29,8 @@
                                             <td>{{ $car->brand }}</td>
                                             <td>{{ $car->model }}</td>
                                             <td>{{ $car->owner->name }} {{ $car->owner->surname }}</td>
+
+                                            @if (Auth::user()!==null && Auth::user()->type=='admin')
                                             <td>
                                                 <a href="{{ route("cars.edit", $car->id) }}" class="btn btn-success">Redaguoti</a>
                                             </td>
@@ -39,14 +41,20 @@
                                                     <button class="btn btn-danger">Ištrinti</button>
                                                 </form>
                                             </td>
+                                            @else
+                                                <td><i>tik admin vartotojams</i></td>
+                                                <td><i>tik admin vartotojams</i></td>
+                                            @endif
+
                                         </tr>
                                     @endforeach
 
                                 </tbody>
                             </table>
-
-
                         </div>
+                    </div>
+                    <div class="mt-3">
+                        Komentarai: padanga
                     </div>
                 </div>
             </div>
