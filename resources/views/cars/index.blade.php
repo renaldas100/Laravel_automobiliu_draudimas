@@ -9,8 +9,53 @@
                     <div class="card">
                         <div class="card-header">Automobiliai</div>
 
-                        <div class="card-body">
+                           <div class="card-body">
+                            <div class="clearfix">
                             <a href="{{ route("cars.create") }}" class="btn btn-success float-end">Įtraukti naują automobilį</a>
+                            </div>
+                            <hr>
+                            <form method="post" action="{{ route("cars.search") }}">
+                                @csrf
+
+                                <div class="row">
+                                    <div class="col-md-6">
+                                        <label class="form-label">Sąvininkas</label>
+                                        <select class="form-select" name="ownerSearch">
+                                            <option value="">-</option>
+                                            @foreach($owners as $owner)
+                                                <option value="{{ $owner->id }}"  {{ ($owner->id==$ownerSearch)?'selected':'' }}>{{ $owner->name }} {{ $owner->surname }}</option>
+                                            @endforeach
+                                        </select>
+                                    </div>
+                                    <div class="col-md-6">
+                                        <div class="mb-3">
+                                            <label class="form-label">Automobilio registracijos numeris</label>
+                                            <input class="form-control" type="text" value="{{ $reg_numberSearch }}" name="reg_numberSearch">
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="row">
+                                    <div class="col-md-6">
+                                        <div class="mb-3">
+                                            <label class="form-label">Gamintojas</label>
+                                            <input class="form-control" type="text" value="{{ $brandSearch }}" name="brandSearch">
+                                        </div>
+                                    </div>
+                                    <div class="col-md-6">
+                                        <div class="mb-3">
+                                            <label class="form-label">Modelis</label>
+                                            <input class="form-control" type="text" value="{{ $modelSearch }}" name="modelSearch">
+                                        </div>
+                                    </div>
+                                </div>
+                                <button class="btn btn-info">Ieškoti</button>
+                            </form>
+                               <form class="mt-2" method="post" action="{{ route("cars.forget") }}">
+                                   @csrf
+                                   <button class="btn btn-info">Išvalyti paiešką</button>
+                               </form>
+                            <hr>
+
                             <table class="table">
                                 <thead>
                                 <tr>

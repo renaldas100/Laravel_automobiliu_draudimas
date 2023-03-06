@@ -11,10 +11,38 @@ class CarController extends Controller
     /**
      * Display a listing of the resource.
      */
-    public function index()
+    public function index(Request $request)
     {
+        $ownerSearch=$request->session()->get('ownerSearch');
+        $reg_numberSearch=$request->session()->get('reg_numberSearch');
+        $brandSearch=$request->session()->get('brandSearch');
+        $modelSearch=$request->session()->get('modelSearch');
+
+        $cars=Car::with('owner');
+        if ($ownerSearch!=null){
+            $cars->where('owner_id','Like',"$ownerSearch");
+        }
+        if ($reg_numberSearch!=null){
+            $cars->where('reg_number','Like',"%$reg_numberSearch%");
+        }
+        if ($brandSearch!=null){
+            $cars->where('brand','Like',"%$brandSearch%");
+        }
+        if ($modelSearch!=null){
+            $cars->where('model','Like',"%$modelSearch%");
+        }
+        $cars=$cars->get();
+
         return view("cars.index",[
-            'cars'=>Car::all()
+
+//            'cars'=>Car::all()
+            'cars'=>$cars,
+            'owners'=>Owner::orderBy('name')->get(),
+            'ownerSearch'=>$ownerSearch,
+            'reg_numberSearch'=>$reg_numberSearch,
+            'brandSearch'=>$brandSearch,
+            'modelSearch'=>$modelSearch
+
         ]);
     }
 
@@ -24,7 +52,8 @@ class CarController extends Controller
     public function create()
     {
         return view("cars.create",[
-            'owners'=>Owner::all()
+//            'owners'=>Owner::all()
+            'owners'=>Owner::orderBy('name')->get(),
         ]);
     }
 
@@ -53,7 +82,8 @@ class CarController extends Controller
     {
         return view("cars.edit",[
             "car"=>$car,
-            "owners"=>Owner::all()
+//            "owners"=>Owner::all()
+            'owners'=>Owner::orderBy('name')->get(),
         ]);
     }
 
@@ -77,4 +107,24 @@ class CarController extends Controller
         return redirect()->route("cars.index");
 
     }
+
+    public function search(Request $request){
+        $request->session()->put('ownerSearch',$request->ownerSearch);
+        $request->session()->put('reg_numberSearch',$request->reg_numberSearch);
+        $request->session()->put('brandSearch',$request->brandSearch);
+        $request->session()->put('modelSearch',$request->modelSearch);
+
+        return redirect()->route('cars.index');
+    }
+
+    public function forget(Request $request){
+        $request->session()->forget('ownerSearch');
+        $request->session()->forget('reg_numberSearch');
+        $request->session()->forget('brandSearch');
+        $request->session()->forget('modelSearch');
+
+        return redirect()->route('cars.index');
+
+    }
+
 }
