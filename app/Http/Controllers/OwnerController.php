@@ -38,6 +38,20 @@ class OwnerController extends Controller
     }
 
     public function store(Request $request){
+
+//                dd($request->all());
+
+        $request->validate([
+            'name'=>'required|min:3|max:32',
+            'surname'=>'required|min:3|max:32',
+
+        ],[
+            'name'=>'Vardas yra privalomas ir min 3 - max 32 simboliai',
+            'surname'=>'Pavardė yra privaloma, max 32 simboliai',
+            'surname.min'=>'Pavardė turi būti minimaliai 3 simboliai',
+
+        ]);
+
         $owner=new Owner();
         $owner->name=$request->name;
         $owner->surname=$request->surname;

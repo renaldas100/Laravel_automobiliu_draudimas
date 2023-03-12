@@ -63,6 +63,19 @@ class CarController extends Controller
     public function store(Request $request)
     {
 //        dd($request->all());
+
+        $request->validate([
+            'reg_number'=>'required|regex:/^[A-Z]{3}\d{3}$/',
+            'brand'=>'required|min:3|max:32',
+            'model'=>'required'
+
+        ],[
+            'reg_number'=>'Numeris yra privalomas ir įvedamas formatas turi būti pvz.: AAA000',
+            'brand'=>'Gamintojas yra privalomas, max 32 simboliai',
+            'brand.min'=>'Gamintojas turi būti minimaliai 3 simboliai',
+            'model'=>'Modelis yra privalomas'
+        ]);
+
         Car::create($request->all());
         return redirect()->route("cars.index");
     }
